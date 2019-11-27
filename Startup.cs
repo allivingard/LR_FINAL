@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Serilog;
 
 namespace alinalr
 {
@@ -26,6 +27,7 @@ namespace alinalr
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            ConfigureLogger();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -43,5 +45,15 @@ namespace alinalr
             app.UseHttpsRedirection();
             app.UseMvc();
         }
+        
+       private void ConfigureLogger()
+       {
+           var log = new LoggerConfiguration()
+               .WriteTo.Console()
+               .WriteTo.File("logs\\alina.log", rollingInterval: RollingInterval.Day)
+               .CreateLogger();
+ 
+           Log.Logger = log;
+       }
     }
 }

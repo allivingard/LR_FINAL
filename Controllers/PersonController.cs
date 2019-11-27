@@ -5,6 +5,7 @@ using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Lr1WebApi.Models;
 using Lr1WebApi.Storage;
+using Serilog;
 
 namespace Lr1WebApi.Controllers
 {
@@ -28,8 +29,11 @@ namespace Lr1WebApi.Controllers
         [HttpGet("{id}")]
         public ActionResult<PersonModel> Get(Guid id)
         {
-            if (!_memCache.Has(id)) return NotFound("No such");
-
+            if (!_memCache.Has(id)) 
+            {
+                Log.Error("Net takogo cheloveka");
+                return NotFound("No such");
+            }
             return Ok(_memCache[id]);
         }
 
